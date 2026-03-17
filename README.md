@@ -15,15 +15,19 @@ git clone https://github.com/<your-username>/<your-repo-name>
 cd <your-repo-name>
 ```
 
-**3. Enable GitHub Pages**
+**3. Enable GitHub Actions**
+
+Go to the **Actions** tab in your fork and click **"I understand my workflows, go ahead and enable them"** — GitHub disables Actions on forks by default.
+
+**4. Enable GitHub Pages**
 
 Go to **Settings → Pages → Source: GitHub Actions**
 
-**4. Add your resume PDF**
+**5. Add your resume PDF**
 
 Drop your resume PDF into the repo root.
 
-**5. Generate your site**
+**6. Generate your site**
 
 Open Claude Code and run:
 
@@ -33,7 +37,7 @@ Open Claude Code and run:
 
 Claude reads your PDF, asks a few design questions, and generates `index.html`.
 
-**6. Push to deploy**
+**7. Push to deploy**
 
 ```bash
 git add index.html

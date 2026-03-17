@@ -7,6 +7,149 @@ description: Build a stunning personal website from a resume PDF. Use this skill
 
 Build a distinctive, production-grade personal website from a resume PDF. The website should reflect the user's profession, personality, and design preferences — not look like a generic template.
 
+---
+
+## Design Aesthetics Mandate
+
+Before writing a single line of code, internalize this: the biggest failure mode in AI-generated websites is aesthetic convergence — every site ends up looking vaguely the same. Avoid this at all costs. Your job is to make something that feels genuinely, specifically designed for *this* person.
+
+### Typography
+
+Choose fonts that are beautiful, unusual, and appropriate to the person's field. The goal is a pairing that someone would notice and comment on — not a safe fallback.
+
+**Banned fonts** (overused to the point of invisibility): Inter, Roboto, Arial, Helvetica, system-ui, -apple-system, Space Grotesk, Poppins. These are defaults, not choices.
+
+**Distinctive Google Fonts to draw from** (pick the right ones for the profession and aesthetic — don't use all of them):
+
+*Editorial / Expressive Serifs:*
+- Cormorant Garamond — romantic, literary, fashion editorial luxury
+- Playfair Display — classic print editorial, high contrast strokes
+- Fraunces — quirky optical serif, surprising personality
+- Instrument Serif — refined and contemporary, quiet confidence
+- DM Serif Display — modern serif with punch
+- Abril Fatface — ultra-high contrast, statement headlines
+- Yeseva One — art deco warmth, approachable authority
+- Cinzel — classical Roman gravitas
+
+*Clean but Distinctive Sans-Serifs:*
+- Syne — geometric, design-forward, contemporary
+- Unbounded — bold, grid-perfect, web-native
+- Plus Jakarta Sans — warm and modern, distinct from Inter
+- Outfit — fresh geometric with personality
+- DM Sans — clean but not sterile
+- Josefin Sans — elegant geometric minimalism
+
+*For Body Text (readable, distinctive):*
+- Lora — warm serif, literary, readable at length
+- Source Serif 4 — editorial trustworthiness
+- Spectral — elegant digital serif
+- Literata — precision-engineered for reading
+
+*For Technical / Developer Aesthetic:*
+- JetBrains Mono — developer credibility
+- IBM Plex Mono — corporate-tech, structured
+- Space Mono — retro-digital, character
+- Fira Code — ligatures, hacker aesthetic
+
+*For Expressive / Niche Aesthetics:*
+- Exo 2 — sci-fi precision
+- Orbitron — space-age (use sparingly — for the right person it's perfect)
+- Rajdhani — angular, technical energy
+
+**Pairing principle:** Pick one display/headline font and one body font. They should contrast — a high-drama serif headline with a clean sans body, or a precise monospace headline with a warm serif body. Boring pairings are pairings where both fonts feel the same weight.
+
+### Color & Theme
+
+Commit to a strong, cohesive palette. Timid palettes that spread color evenly feel amateur. One dominant color + one sharp accent + careful neutrals is almost always stronger than three equally-weighted colors.
+
+**Banned color combinations** (clichéd, expected):
+- Purple/violet gradients on white (the default "AI aesthetic")
+- Teal + coral on white (overused startup palette)
+- Generic dark mode: #1a1a1a background + white text + blue accent
+- Flat pastels with no contrast or tension
+
+**Distinctive palette archetypes to draw from** (adapt, don't copy exactly):
+- Deep forest `#1a2e1a` + warm gold `#c9a84c` + cream `#f5f0e8` — organic authority
+- Midnight navy `#0d1b2a` + electric cyan `#00d4ff` + white — technical precision
+- Warm black `#1a1208` + amber `#f59e0b` + ivory — editorial warmth
+- Charcoal `#2a2a2a` + rust `#c0392b` + off-white `#fafaf7` — bold confidence
+- Deep burgundy `#3d0c02` + champagne `#e8d5b7` + ivory — academic luxury
+- Near-black `#0e0e0e` + acid lime `#a8d729` + white — technical edge
+- Slate `#2c3e50` + deep coral `#ff6b4a` + cream — warm modernism
+- Off-white `#fafaf8` + ink `#1a1a2e` + terracotta `#c4602a` — grounded warmth
+- Dark violet `#1a0533` + hot pink `#ff6b9d` + white — creative maximalism
+
+**Actively vary between light and dark themes** across different users. Don't default to dark because it "looks more technical" — a light site with a strong editorial palette can be just as striking.
+
+Use CSS custom properties for every color:
+```css
+:root {
+  --color-bg: #1a2e1a;
+  --color-surface: #243824;
+  --color-accent: #c9a84c;
+  --color-text: #f5f0e8;
+  --color-muted: #8a9e8a;
+}
+```
+
+### Motion
+
+One well-orchestrated entrance sequence creates more delight than ten scattered micro-interactions. Think of the page load as a single choreographed moment.
+
+**Effective patterns:**
+```css
+/* Staggered reveal on load — apply with increasing animation-delay */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-name    { animation: fadeUp 0.6s ease forwards; animation-delay: 0.1s; }
+.hero-title   { animation: fadeUp 0.6s ease forwards; animation-delay: 0.25s; }
+.hero-tagline { animation: fadeUp 0.6s ease forwards; animation-delay: 0.4s; }
+.hero-cta     { animation: fadeUp 0.6s ease forwards; animation-delay: 0.55s; }
+```
+
+- Use `opacity: 0` as default and animate to `opacity: 1` — clean, compositable
+- Hover states should use `transition: all 0.2s ease` — fast enough to feel responsive
+- Scroll-triggered reveals: use `IntersectionObserver` + a CSS class toggle for sections entering the viewport
+- For borders, underlines, and highlights: animated `width` or `clip-path` transforms feel precise and intentional
+
+**Avoid:** particle.js / canvas particle effects, excessive bouncing, parallax that fights the content, animations that delay content visibility for more than ~1 second total.
+
+### Backgrounds
+
+Solid colors are the lazy default. Every background should have at least one layer of depth or texture.
+
+**Techniques:**
+```css
+/* Mesh gradient — multiple radial gradients layered */
+background:
+  radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.15) 0%, transparent 60%),
+  radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.08) 0%, transparent 50%),
+  #0d1b2a;
+
+/* Subtle grid pattern */
+background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+background-size: 48px 48px;
+
+/* Grain texture via SVG filter */
+filter: url(#grain); /* define SVG feTurbulence filter */
+
+/* Diagonal stripe accent */
+background: repeating-linear-gradient(
+  -45deg,
+  transparent,
+  transparent 8px,
+  rgba(201,168,76,0.05) 8px,
+  rgba(201,168,76,0.05) 9px
+);
+```
+
+Match the background technique to the overall aesthetic — a terminal-aesthetic dev site might use a subtle scanline effect; a luxury finance site might use a very faint linen texture.
+
+---
+
 ## Workflow
 
 ### Step 1: Ensure PDF Reader MCP is Available
@@ -34,24 +177,24 @@ Use the pdf-reader MCP to read the user's resume PDF. Extract and organize:
 
 ### Step 3: Analyze the User's Profession
 
-The user's job determines the website's aesthetic direction. Match the design to their professional identity:
+The user's job determines the website's aesthetic direction. Match the design to their professional identity — but go beyond surface-level categorization. A "software engineer" at a hedge fund has different aesthetics than one at a design agency.
 
-| Profession Category | Suggested Direction |
-|---|---|
-| Software Engineer / Developer | Clean, technical, dark themes, monospace accents, terminal aesthetics, code-inspired |
-| Designer / Creative Director | Bold, experimental, maximalist or refined minimal, strong typography |
-| Data Scientist / Analyst | Data-viz inspired, structured grids, charts as decoration, precision |
-| Marketing / Business | Polished, confident, editorial magazine feel, strong CTAs |
-| Academic / Researcher | Scholarly, serif-heavy, paper-like, intellectual minimalism |
-| Healthcare / Medical | Clean, trustworthy, calming colors, accessibility-first |
-| Finance / Consulting | Luxury, refined, dark + gold accents, authority |
-| Artist / Photographer | Gallery-like, image-forward, dramatic spacing |
-| Product Manager | Modern SaaS aesthetic, organized, metric-driven |
-| Teacher / Educator | Warm, approachable, friendly colors, readable |
-| Legal | Traditional, authoritative, serif fonts, structured |
-| Freelancer / Generalist | Personal brand focused, unique personality expression |
+| Profession Category | Aesthetic Direction | Font Starting Point | Color Direction |
+|---|---|---|---|
+| Software Engineer / Developer | Terminal-inspired, precise, dark-preferred | JetBrains Mono or IBM Plex Mono + clean sans | Dark bg + electric accent (cyan, green, amber) |
+| Designer / Creative Director | Bold, experimental, strong typographic presence | Expressive display serif + geometric sans | High contrast, unexpected pairings |
+| Data Scientist / Analyst | Structured, analytical, data-viz inspired | Precise sans + readable serif body | Deep navy/slate + sharp single accent |
+| Marketing / Business | Editorial magazine feel, confident, CTA-driven | High-contrast serif headline + warm sans | Warm dominant + bold accent |
+| Academic / Researcher | Scholarly, serif-heavy, intellectual minimalism | Cormorant or Spectral + Lora body | Cream/ivory + ink + one warm accent |
+| Healthcare / Medical | Clean, trustworthy, calm authority | DM Sans or Plus Jakarta Sans + readable body | Calming neutral + trustworthy accent |
+| Finance / Consulting | Luxury, authority, refined | Cinzel or Yeseva One + elegant body serif | Dark + gold/champagne or deep navy + silver |
+| Artist / Photographer | Gallery-like, image-forward, dramatic | Abril Fatface or Syne + minimal body | Depends on their work — often near-black + one bold color |
+| Product Manager | Modern, organized, metric-forward | Instrument Serif + clean sans | Confident mid-tone + crisp accent |
+| Teacher / Educator | Warm, approachable, readable | Fraunces or DM Serif + warm sans body | Warm palette, higher brightness |
+| Legal | Authoritative, traditional, structured | Cinzel or Playfair Display + serif body | Dark navy or charcoal + gold |
+| Freelancer / Generalist | Personal brand expression — use resume details to decide | Depends on their personality | Depends on their personality |
 
-Use this as a starting point, but adapt based on the specific details in the resume.
+Use this as a starting point, then adapt based on what the specific resume reveals about their personality, seniority, and industry context.
 
 ### Step 4: Ask the User's Design Preferences
 
@@ -69,7 +212,7 @@ The categories to cover:
 
 3. **Visual style** — Present 3-4 design styles relevant to their field. Only show styles that actually make sense — a lawyer probably shouldn't see "brutalism" as the top pick, a creative coder probably shouldn't see "traditional corporate". Briefly explain each with a one-line "this feels like..." description.
 
-4. **Typography feel** — Suggest 3-4 font personality directions that match the vibe. Describe the feeling each conveys rather than naming specific fonts (e.g., "sharp geometric sans-serif — modern, precise, tech-forward" not "use Inter").
+4. **Typography feel** — Suggest 3-4 font personality directions that match the vibe. Reference the font options in the Design Aesthetics Mandate — describe the feeling each conveys in plain language (e.g., "a high-contrast editorial serif for headlines — feels like a magazine cover, not a website" rather than "use Playfair Display"). Do not suggest Inter, Roboto, Arial, or Space Grotesk.
 
 5. **Content layout** — Single page vs. multi-page, but frame the recommendation based on how much content their resume has. If they have 10+ years of experience and many projects, lean toward multi-page. If it's concise, suggest single page.
 
@@ -77,7 +220,7 @@ The categories to cover:
 
 7. **Animation & interaction level** — Offer 3-4 levels of motion, but tailor the descriptions to their field. A creative director might see "cinematic page transitions with scroll-triggered reveals", while an accountant might see "clean fade-ins that keep the focus on content".
 
-8. **Background & texture** — Suggest 3-4 background treatments that complement the visual styles offered above. These should feel cohesive with the other choices, not random.
+8. **Background & texture** — Suggest 3-4 background treatments that complement the visual styles offered above. These should feel cohesive with the other choices — suggest from the techniques in the Design Aesthetics Mandate.
 
 9. **Special features** — Curate a list of 4-6 extras that are relevant to their profession. A developer might see "GitHub contribution graph widget" and "live project demo embeds"; a consultant might see "client logo carousel" and "case study cards". Always include basics like "downloadable PDF resume" and "contact section".
 
@@ -96,12 +239,34 @@ The categories to cover:
 
 ### Step 5: Generate the Design System
 
-Use the `frontend-design` skill's to generate a design system based on the user's profession and preferences:
+Based on the user's profession and their answers from Step 4, define a concrete design system before writing any HTML. This prevents design decisions from drifting mid-build.
 
+Write out (internally — you don't need to show this to the user):
+
+```
+Typography:
+  - Headline font: [specific font name] — [why it fits]
+  - Body font: [specific font name] — [why it fits]
+  - Accent font (if any): [specific font name or "none"]
+
+Palette:
+  --color-bg: [hex]
+  --color-surface: [hex]
+  --color-accent: [hex]
+  --color-accent-2: [hex if needed]
+  --color-text: [hex]
+  --color-muted: [hex]
+
+Background treatment: [technique from Design Aesthetics Mandate]
+Animation approach: [one entrance sequence + hover states, or more — describe]
+Layout type: [single page / multi-page]
+```
+
+This design system must be genuinely derived from the user's profession and stated preferences — not a safe default. If you find yourself writing "Inter" or "#6366f1" here, stop and reconsider.
 
 ### Step 6: Build the Website
 
-Create the static HTML website in the current working directory. Follow these principles:
+Create the static HTML website in the current working directory.
 
 **Technical Requirements:**
 - Pure static HTML + CSS + JS (no build tools, no frameworks)
@@ -122,12 +287,13 @@ Create the static HTML website in the current working directory. Follow these pr
 - Footer with social links
 
 **Design Execution:**
-- Follow the frontend-design skill principles: be bold, distinctive, and avoid generic AI aesthetics
-- Match the design to the user's profession (see Step 3)
-- Apply the design system from Step 5
-- Add thoughtful animations and micro-interactions (CSS-only preferred)
-- Use CSS custom properties for consistent theming
-- Create visual hierarchy — the most important info should stand out
+Apply the design system from Step 5. Then go further:
+
+- **Typography in code:** Load the exact Google Fonts you specified. Set `font-family` explicitly at each level — don't let anything fall back to system fonts.
+- **Background:** Implement the background technique from the Design Aesthetics Mandate, not a solid color.
+- **Color:** Use CSS custom properties for every color. Apply the dominant color boldly — it should feel *committed to*, not timid.
+- **Animation:** Implement one choreographed entrance sequence using staggered `animation-delay`. Add `IntersectionObserver` for scroll-triggered section reveals. Keep hover states fast (`0.2s`).
+- **Layout:** Use CSS Grid for major layout structure. Avoid cookie-cutter card grids — think about what layout *this person's content* actually calls for.
 
 **File Structure:**
 - Save the main file as `index.html` in the current directory

@@ -1,6 +1,3 @@
-# Resume PDF (personal — do not commit)
-*.pdf
-
 # macOS
 .DS_Store
 
